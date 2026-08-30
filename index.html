@@ -1,102 +1,75 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>嘻嘻 Hair Salon｜評論小幫手</title>
-<style>
-:root{--bg:#f7f2ea;--card:#fffdf9;--ink:#292521;--muted:#766f68;--line:#ddd3c7;--accent:#292521}
-*{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink)}
-main{max-width:560px;margin:auto;padding:34px 18px 48px}
-.brand{text-align:center;margin-bottom:28px}.brand .moon{font-size:34px}.brand h1{font-size:25px;margin:7px 0}.brand p{color:var(--muted);margin:0;font-size:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 8px 28px rgba(40,30,20,.05)}
-h2{font-size:17px;margin:0 0 13px}
-.options{display:flex;flex-wrap:wrap;gap:9px}
-button{font:inherit}
-.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;color:var(--ink)}
-.chip.active{background:var(--accent);color:white;border-color:var(--accent)}
-.primary,.secondary{width:100%;border:0;border-radius:15px;padding:15px;margin-top:10px;font-weight:700}
-.primary{background:var(--accent);color:white}.secondary{background:#eee7de;color:var(--ink)}
-textarea{width:100%;min-height:145px;resize:vertical;border:1px solid var(--line);border-radius:15px;padding:14px;font:inherit;line-height:1.65;background:#fff;color:var(--ink)}
-.small{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;margin-top:16px}
-.status{text-align:center;font-size:13px;min-height:20px;margin-top:7px;color:#4f6a51}
-</style>
-</head>
-<body>
-<main>
-  <div class="brand">
-    <div class="moon">☾ ✦</div>
-    <h1>嘻嘻 Hair Salon</h1>
-    <p>謝謝你今天來找我們 ♡ 幫你快速整理一下真實感受</p>
-  </div>
-
-  <div class="card">
-    <h2>今天做了什麼？</h2>
-    <div class="options" id="services"></div>
-  </div>
-
-  <div class="card">
-    <h2>今天最有感的是？（可複選）</h2>
-    <div class="options" id="feelings"></div>
-  </div>
-
-  <button class="primary" id="generate">✨ 幫我整理評論</button>
-
-  <div class="card">
-    <h2>你的評論草稿</h2>
-    <textarea id="output" placeholder="選好上面的項目後，點「幫我整理評論」"></textarea>
-    <button class="primary" id="copy">📋 複製評論</button>
-    <button class="secondary" id="google">前往 Google 留下評論</button>
-    <div class="status" id="status"></div>
-  </div>
-  <div class="small">內容只是協助整理你的真實體驗，你可以自由修改。星等與是否發布都由你自己決定。</div>
-</main>
-<script>
-const MAPS_URL="https://maps.app.goo.gl/QWEvYp2zrz7M4tUV6?g_st=ic";
-const services=["剪髮","染髮","漂髮","燙髮","縮毛矯正","護髮"];
-const feelings=["溝通仔細","效果自然","顏色喜歡","很好整理","服務親切","環境舒服","很有耐心","整體很滿意"];
-let selectedService="", selectedFeelings=[];
-
-function mount(){
- const s=document.getElementById("services");
- services.forEach(x=>{let b=document.createElement("button");b.className="chip";b.textContent=x;b.onclick=()=>{[...s.children].forEach(v=>v.classList.remove("active"));b.classList.add("active");selectedService=x};s.appendChild(b)});
- const f=document.getElementById("feelings");
- feelings.forEach(x=>{let b=document.createElement("button");b.className="chip";b.textContent=x;b.onclick=()=>{b.classList.toggle("active");selectedFeelings=b.classList.contains("active")?[...selectedFeelings,x]:selectedFeelings.filter(v=>v!==x)};f.appendChild(b)});
-}
-const intros=[
- s=>`今天來做${s}，`,
- s=>`這次來嘻嘻做${s}，`,
- s=>`今天來整理頭髮，做了${s}，`
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>嘻嘻 Hair Salon｜評論小幫手</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f7f2ea;color:#292521;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC",sans-serif}main{max-width:560px;margin:auto;padding:32px 18px}.brand{text-align:center;margin-bottom:24px}.brand h1{margin:6px;font-size:25px}.brand p,.small{color:#766f68}.card{background:#fffdf9;border:1px solid #ddd3c7;border-radius:22px;padding:20px;margin:14px 0}h2{font-size:17px;margin:0 0 13px}.options{display:flex;flex-wrap:wrap;gap:9px}.chip{border:1px solid #ddd3c7;background:#fff;border-radius:999px;padding:10px 14px}.chip.active{background:#292521;color:#fff}.primary,.secondary{width:100%;border:0;border-radius:15px;padding:15px;margin-top:10px;font-weight:700}.primary{background:#292521;color:#fff}.secondary{background:#eee7de}textarea{width:100%;min-height:190px;border:1px solid #ddd3c7;border-radius:15px;padding:14px;font:inherit;line-height:1.7}.small{text-align:center;font-size:12px;line-height:1.6;margin-top:16px}.status{text-align:center;font-size:13px;min-height:20px;margin-top:7px;color:#4f6a51}</style></head><body><main>
+<div class="brand"><div style="font-size:34px">☾ ✦</div><h1>嘻嘻 Hair Salon</h1><p>謝謝你今天來找我們 ♡ 幫你快速整理真實感受</p></div>
+<div class="card"><h2>今天是哪位設計師幫你服務呢？</h2><div class="options" id="designers"></div></div>
+<div class="card"><h2>今天做了什麼？</h2><div class="options" id="services"></div></div>
+<div class="card"><h2>今天最有感的是？（可複選）</h2><div class="options" id="feelings"></div></div>
+<button class="primary" id="generate">✨ 幫我整理評論</button>
+<div class="card"><h2>你的評論草稿</h2><textarea id="output" placeholder="選好上面的項目後，點「幫我整理評論」"></textarea><button class="primary" id="copy">📋 複製評論</button><button class="secondary" id="google">前往 Google 留下評論</button><div class="status" id="status"></div></div>
+<div class="small">內容只是協助整理你的真實體驗，你可以自由修改。星等與是否發布都由你自己決定。</div>
+</main><script>
+const MAPS_URL="https://www.google.com/maps/place/C.C+%E5%98%BB%E5%98%BB+Hair+Salon/@24.6843762,120.881862,17z/data=!4m18!1m9!3m8!1s0x3469b3adc882f317:0x367d903c5523e2ce!2zQy5DIOWYu-WYuyBIYWlyIFNhbG9u!8m2!3d24.6843762!4d120.881862!9m1!1b1!16s%2Fg%2F11tft7wllw!3m7!1s0x3469b3adc882f317:0x367d903c5523e2ce!8m2!3d24.6843762!4d120.881862!9m1!1b1!16s%2Fg%2F11tft7wllw!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDgyNi4wIKXMDSoASAFQAw%3D%3D";
+const designers=["Tim","Raina","小M"],services=["剪髮","染髮","漂髮","燙髮","縮毛矯正","護髮"],feelings=["溝通仔細","效果自然","顏色喜歡","很好整理","服務親切","環境舒服","很有耐心","整體很滿意"];
+let D="",S="",F=[];
+function chips(id,arr,type){let e=document.getElementById(id);arr.forEach(x=>{let b=document.createElement("button");b.className="chip";b.textContent=x;b.onclick=()=>{if(type==="f"){b.classList.toggle("active");F=b.classList.contains("active")?[...F,x]:F.filter(v=>v!==x)}else{[...e.children].forEach(v=>v.classList.remove("active"));b.classList.add("active");if(type==="d")D=x;else S=x}};e.appendChild(b)})}
+chips("designers",designers,"d");chips("services",services,"s");chips("feelings",feelings,"f");
+const starts=[
+(d,s)=>`今天來嘻嘻找${d}做${s}，`,
+(d,s)=>`這次預約${d}幫我做${s}，`,
+(d,s)=>`第一次來嘻嘻，是${d}幫我做${s}，`,
+(d,s)=>`這次來整理頭髮，找${d}做了${s}，`,
+(d,s)=>`朋友推薦來找${d}，這次做了${s}，`,
+(d,s)=>`想整理頭髮一陣子了，今天來找${d}做${s}，`,
+(d,s)=>`最近想換個感覺，這次給${d}做${s}，`,
+(d,s)=>`今天是${d}幫我處理${s}，`,
+(d,s)=>`之前就有注意到嘻嘻，這次終於來找${d}做${s}，`,
+(d,s)=>`今天來換個新造型，預約了${d}做${s}，`,
+(d,s)=>`這次把頭髮交給${d}處理，做的是${s}，`,
+(d,s)=>`很久沒好好整理頭髮了，今天找${d}做${s}，`,
+(d,s)=>`看到作品後決定來找${d}，今天做${s}，`,
+(d,s)=>`今天來嘻嘻整理一下，${d}幫我做了${s}，`,
+(d,s)=>`這次想讓自己換個感覺，所以找${d}做${s}，`,
+(d,s)=>`今天第一次給${d}服務，選擇做${s}，`,
+(d,s)=>`原本只是想整理一下頭髮，這次預約${d}做${s}，`,
+(d,s)=>`一直想換個適合自己的造型，今天來找${d}做${s}，`,
+(d,s)=>`今天特地來嘻嘻整理頭髮，是${d}幫我做${s}，`,
+(d,s)=>`這次想把頭髮好好整理一下，就預約${d}做${s}，`,
+(d,s)=>`看了嘻嘻的作品一陣子，今天終於來找${d}做${s}，`,
+(d,s)=>`今天來找${d}整理頭髮，這次選的是${s}，`,
+(d,s)=>`想讓整體造型有點變化，所以這次找${d}做${s}，`,
+(d,s)=>`這次來嘻嘻是${d}幫我服務，做了${s}，`,
+(d,s)=>`今天把頭髮放心交給${d}，這次做的是${s}，`,
+(d,s)=>`最近覺得頭髮該整理了，所以來找${d}做${s}，`,
+(d,s)=>`第一次嘗試找${d}整理頭髮，今天做了${s}，`,
+(d,s)=>`這次想做點不一樣的改變，就來找${d}做${s}，`,
+(d,s)=>`今天來嘻嘻放鬆一下，也順便找${d}做了${s}，`,
+(d,s)=>`原本對這次${s}有一些自己的想法，今天交給${d}幫我完成，`
 ];
-const phrase={
-"溝通仔細":["做之前會很仔細溝通想要的感覺","過程中溝通得很仔細"],
-"效果自然":["完成後的效果很自然","做完呈現的感覺很自然"],
-"顏色喜歡":["最後的顏色很喜歡","染完的顏色很符合我想要的感覺"],
-"很好整理":["回去應該也會很好整理","做完頭髮變得更好整理"],
-"服務親切":["服務很親切，不會有壓力","整個服務過程很親切"],
-"環境舒服":["店裡環境很舒服","整體空間讓人很放鬆"],
-"很有耐心":["設計師很有耐心地確認細節","過程中很有耐心"],
-"整體很滿意":["整體體驗很滿意","這次整理完很滿意"]
-};
-const ends=["，整個過程都很舒服～","，謝謝今天幫我把頭髮整理得這麼好！","，是一次很舒服的整理體驗。","，做完很喜歡😊"];
-function pick(a){return a[Math.floor(Math.random()*a.length)]}
-document.getElementById("generate").onclick=()=>{
- if(!selectedService){document.getElementById("status").textContent="先選一下今天做的服務喔";return}
- let fs=selectedFeelings.length?selectedFeelings:["整體很滿意"];
- let pieces=fs.slice(0,3).map(x=>pick(phrase[x]));
- let text=pick(intros)(selectedService)+pieces.join("，")+pick(ends);
- document.getElementById("output").value=text.replace(/，，/g,"，");
- document.getElementById("status").textContent="已幫你整理好，可以自由修改 ♡";
-};
-document.getElementById("copy").onclick=async()=>{
- const text=document.getElementById("output").value.trim();
- if(!text){document.getElementById("status").textContent="先產生一段評論喔";return}
- try{await navigator.clipboard.writeText(text);document.getElementById("status").textContent="✓ 已複製！接著前往 Google 貼上即可"}
- catch(e){document.getElementById("output").select();document.execCommand("copy");document.getElementById("status").textContent="✓ 已複製"}
-};
-document.getElementById("google").onclick=()=>window.open(MAPS_URL,"_blank");
-mount();
-</script>
-</body>
-</html>
+const p={
+"溝通仔細":[d=>`${d}做之前會先聽我想要的感覺，再依照髮況給建議`,d=>`溝通很仔細，連我自己說不太清楚的地方也會慢慢確認`,d=>`開始前會把細節跟後續整理方式說得很清楚`],
+"效果自然":[d=>`完成後的效果很自然，很適合我的臉型`,d=>`最後呈現的感覺很柔和耐看`,d=>`做完不會有刻意做出來的感覺，很自然`],
+"顏色喜歡":[d=>`最後的髮色很喜歡，也很襯膚色`,d=>`顏色就是我想要的感覺，很有質感`,d=>`髮色調得很細緻，做完馬上就很喜歡`],
+"很好整理":[d=>`最喜歡的是回家自己也很好整理，不是只有剛做完好看`,d=>`也有教我平常怎麼吹整，感覺自己在家也做得到`,d=>`做完之後日常整理應該可以省很多時間`],
+"服務親切":[d=>`${d}很親切，整個過程都不會有壓力`,d=>`服務很舒服，也不會一直推銷東西`,d=>`從開始到結束都很親切，整個過程很放鬆`],
+"環境舒服":[d=>`店裡環境乾淨舒服，待久了也很放鬆`,d=>`整體空間很舒服，來整理頭髮也像順便放鬆一下`,d=>`店內氛圍很舒服，是我喜歡的感覺`],
+"很有耐心":[d=>`${d}很有耐心，每個細節都會再確認`,d=>`過程中問了不少問題，都很有耐心地說明`,d=>`處理頭髮很細心，也會一直注意我的感受`],
+"整體很滿意":[d=>`從溝通到完成都很滿意`,d=>`做完照鏡子的第一眼就很喜歡`,d=>`最後的完成度很喜歡，跟期待的感覺很接近`]};
+const ends=[
+d=>`整體很滿意，下次整理頭髮還會再找${d}。`,d=>`謝謝${d}今天幫我整理，做完心情都變好了😊`,
+d=>`這次體驗很好，下次還會想再回來。`,d=>`很喜歡這次完成的感覺，推薦給也在找設計師的人。`,
+d=>`整體很舒服，也很喜歡最後的成果！`,d=>`做完真的很喜歡，之後有需要會再預約。`,
+d=>`這次的成果很符合期待，會想再回來找${d}。`,d=>`離開店裡的時候心情很好，謝謝今天的用心。`,
+d=>`是一次很舒服的整理頭髮體驗，推薦。`,d=>`成品很好看，之後也會推薦朋友來。`,
+d=>`很喜歡這次的新造型，期待下次再來。`,d=>`整體感受很不錯，會願意再訪。`,
+d=>`做完比原本預期更喜歡，謝謝${d}。`,d=>`這次真的有整理到我想要的感覺，很開心。`,
+d=>`從過程到結果都讓人很滿意，下次見！`
+];
+const extras=[
+"","，整個過程很順","，細節也都有照顧到","，整體感覺很放鬆","，完成後看起來很有精神",
+"","，過程中也會確認我的想法","，不會有被趕時間的感覺","，最後成果很耐看","，整體比想像中更適合我"
+];
+const pick=a=>a[Math.floor(Math.random()*a.length)],shuffle=a=>[...a].sort(()=>Math.random()-.5);
+generate.onclick=()=>{if(!D){status.textContent="先選今天服務你的設計師喔";return}if(!S){status.textContent="再選今天做的服務喔";return}let fs=F.length?shuffle(F).slice(0,3):["整體很滿意"];let pieces=fs.map(x=>pick(p[x])(D));let text=pick(starts)(D,S)+pieces.join(pick(["，","，而且","，另外","，最有感的是"]))+pick(extras)+"。"+pick(ends)(D);output.value=text.replace(/。。/g,"。").replace(/，，/g,"，");status.textContent="已幫你整理好，可以自由修改 ♡"};
+copy.onclick=async()=>{if(!output.value.trim()){status.textContent="先產生一段評論喔";return}try{await navigator.clipboard.writeText(output.value);status.textContent="✓ 已複製！接著前往 Google 貼上即可"}catch(e){output.select();document.execCommand("copy");status.textContent="✓ 已複製"}};
+google.onclick=()=>window.open(MAPS_URL,"_blank");
+</script></body></html>
